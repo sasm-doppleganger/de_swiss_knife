@@ -8,7 +8,7 @@ TODAY = datetime.now().strftime("%Y-%m-%d")
 PROJECT_ROOT = Path.cwd()
 INPUT_FILE_PATH = Path(f"{PROJECT_ROOT}/input/sleep_efficiency__raw.csv")
 OUTPUT_FOLDER = Path(f"{PROJECT_ROOT}/input/chunks")
-DIVISOR = 7
+DIVISOR = 12
 
 
 # log_dir = PROJECT_ROOT / "logs" / "local_scraper"
@@ -30,12 +30,26 @@ logger = logging.getLogger(__name__)
 # EXTRA CAREFUL WITH delete_output_contents
 # DELETES ALL .csv files beforehand in output folder if True
 def divide_csv_into_chunks(divisor:int, input_file_path:str, output_folder:str, delete_output_contents:bool):
+    if isinstance(divisor, bool) or not isinstance(divisor, int):
+        raise TypeError(f"Expected an int, but got {type(divisor).__name__}")
+
+    if divisor <= 0:
+        raise ValueError("Divisor must be greater than 0")
+
     if delete_output_contents:
         deleted_count = delete_all_csv_from_folder(output_folder)
         logger.info(f"Deleted {deleted_count} .csv files from {output_folder}.")
 
     df = pd.read_csv(input_file_path)
+
+    if df.empty:
+        raise ValueError("Input CSV contains no rows")
+
     df_len = len(df)
+
+    if divisor > df_len:
+        raise ValueError(f"Divisor ({divisor}) cannot be greater than the number of rows ({df_len})")
+
     rows_per_part = df_len // divisor
     logger.info(f"# of parts : {divisor}; Rows per full part: {rows_per_part}.")
 
@@ -43,11 +57,17 @@ def divide_csv_into_chunks(divisor:int, input_file_path:str, output_folder:str, 
     for i in range(0, df_len, rows_per_part):
         step += 1
         chunk = df.iloc[i:i+rows_per_part]
+        
+        if i + rows_per_part > df_len:
+            # append to previous file
+            output_path = f"{output_folder}/part_{step-1}.csv"
+            chunk.to_csv(output_path,index=False, mode='a', header=False)
+            break
 
         output_path = f"{output_folder}/part_{step}.csv"
         chunk.to_csv(output_path,index=False)
 
-    logger.info(f"{input_file_path.name} was divided into {divisor} parts.")
+    logger.info(f"{input_file_path.name} was succesfully divided.")
 
 
 def delete_all_csv_from_folder(path: Path) -> int:
@@ -57,5 +77,3 @@ def delete_all_csv_from_folder(path: Path) -> int:
         deleted_count += 1
     return deleted_count
 
-
-divide_csv_into_chunks(divisor=DIVISOR, input_file_path=INPUT_FILE_PATH, output_folder=OUTPUT_FOLDER, delete_output_contents=True)
