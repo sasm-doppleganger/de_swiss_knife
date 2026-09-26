@@ -2,13 +2,16 @@ import pandas as pd
 from pathlib import Path
 import logging
 from datetime import datetime
+import yaml
 
 
 TODAY = datetime.now().strftime("%Y-%m-%d")
+
 PROJECT_ROOT = Path.cwd()
+DATA_CONTRACT_LOCATION = Path(f"{PROJECT_ROOT}/input/data_contract.yaml")
 INPUT_FILE_PATH = Path(f"{PROJECT_ROOT}/input/sleep_efficiency__raw.csv")
 OUTPUT_FOLDER = Path(f"{PROJECT_ROOT}/input/chunks")
-DIVISOR = 12
+DIVISOR = 10
 
 
 # log_dir = PROJECT_ROOT / "logs" / "local_scraper"
@@ -77,3 +80,19 @@ def delete_all_csv_from_folder(path: Path) -> int:
         deleted_count += 1
     return deleted_count
 
+
+def data_contract_validation(input_file_path, data_contract_file_path):
+    with open(data_contract_file_path, 'r') as file:
+        data_contract = yaml.safe_load(file)
+
+    df = pd.read_csv(input_file_path)
+
+    print(data_contract)
+
+
+
+data_contract_validation(Path("input\chunks\part_1.csv"),DATA_CONTRACT_LOCATION)
+
+# print(df.dtypes)
+# for col in df.columns:
+#     print(col.dtype)

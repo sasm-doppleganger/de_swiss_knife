@@ -1,0 +1,47 @@
+ID:
+  type: int64
+  required: true
+
+Age:
+  type: int64
+  required: true
+
+Gender:
+  type: str
+  unique_values: 2
+
+Bedtime:
+  type: timestamp
+
+Wakeup time:
+  type: timestamp
+
+Sleep duration:
+  type: float64
+
+Sleep efficiency:
+  type: float64
+
+REM sleep percentage:
+  type: int64
+
+Deep sleep percentage:
+  type: int64
+
+Light sleep percentage: 
+  type: int64
+
+Awakenings:
+  type: float64
+
+Caffeine consumption:
+  type: float64
+
+Alcohol consumption:
+  type: float64
+
+Smoking status:
+  type: bool
+
+Excercise frequency:
+  type: float64
