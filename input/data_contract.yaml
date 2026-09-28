@@ -1,47 +1,71 @@
-ID:
-  type: int64
-  required: true
+apiVersion: v3.2.0 # Standard version
+kind: DataContract
 
-Age:
-  type: int64
-  required: true
+# What's this data contract about?
+id: 12345678-fakeid-12345678
+name: None
+version: 1.0.0
+status: draft
 
-Gender:
-  type: str
-  unique_values: 2
+description: 
+  purpose: testing
+  limitations: limitless
+  usage: infinite
 
-Bedtime:
-  type: timestamp
 
-Wakeup time:
-  type: timestamp
+schema:
+  - name: sleep_efficiency
+    properties:
+      - name: ID
+        logicalType: integer
+        unique: true
 
-Sleep duration:
-  type: float64
+      - name: Age
+        logicalType: integer
+        logicalTypeOptions:
+          exclusiveMinimum: 17
 
-Sleep efficiency:
-  type: float64
+      - name: Gender
+        logicalType: string
+        enum:
+          - value: Female
+          - value: Male
 
-REM sleep percentage:
-  type: int64
+      - name: Bedtime
+        logicalType: timestamp
+      
+      - name: Wakeup time
+        logicalType: timestamp
+      
+      - name: Sleep duration
+        logicalType: number
+      
+      - name: Sleep efficiency
+        logicalType: number
+      
+      - name: REM sleep percentage
+        logicalType: integer
+      
+      - name: Deep sleep percentage
+        logicalType: integer
 
-Deep sleep percentage:
-  type: int64
+      - name: Light sleep percentage
+        logicalType: integer
+      
+      - name: Awakenings
+        logicalType: integer
+      
+      - name: Caffeine consumption
+        logicalType: number
 
-Light sleep percentage: 
-  type: int64
+      - name: Alcohol consumption
+        logicalType: number
 
-Awakenings:
-  type: float64
-
-Caffeine consumption:
-  type: float64
-
-Alcohol consumption:
-  type: float64
-
-Smoking status:
-  type: bool
-
-Excercise frequency:
-  type: float64
+      - name: Smoking status
+        logicalType: boolean
+        enum:
+          - value: Yes
+          - value: No
+      
+      - name: Exercise frequency
+        logicalType: boolean

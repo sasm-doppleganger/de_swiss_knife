@@ -81,13 +81,26 @@ def delete_all_csv_from_folder(path: Path) -> int:
     return deleted_count
 
 
-def data_contract_validation(input_file_path, data_contract_file_path):
+def data_contract_validation(input_file_path: Path, data_contract_file_path: Path):
     with open(data_contract_file_path, 'r') as file:
         data_contract = yaml.safe_load(file)
 
     df = pd.read_csv(input_file_path)
 
-    print(data_contract)
+    if df.empty:
+        raise ValueError("Input CSV contains no rows")
+
+    schema_definition = data_contract.get('Schema definition')
+
+    if df.shape[1] != len(schema_definition.keys()):
+        logger.error(f"Number of columns present is different from number of columns defined in data contract")
+
+    for col in df.columns:
+        if col not in schema_definition.keys():
+            logger.error(f"{col} is not defined in data contact")
+
+        print(schema_definition[col]['type'])
+
 
 
 
