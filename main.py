@@ -2,7 +2,6 @@ import pandas as pd
 from pathlib import Path
 import logging
 from datetime import datetime
-import yaml
 from datacontract.data_contract import DataContract
 
 
@@ -94,26 +93,10 @@ def data_contract_validation(input_file_path: Path, data_contract_file_path: Pat
 
     print(errors.result.value)
     
-    # for i in errors:
-    #     print(i)
-
-    # if not errors:
-    #     print("Data contract is valid.")
-    #     result = data_contract.validate(input_file_path)
-
-    #     print(result.is_valid())
-
-    # if errors:
-    #     print("Data contract has problems:")
-    #     for error in errors:
-    #         print(f"- {error}")
 
 
-
-
-
-data_contract_validation(Path("input\chunks\part_1.csv"),DATA_CONTRACT_LOCATION)
-
-# print(df.dtypes)
-# for col in df.columns:
-#     print(col.dtype)
+if __name__ == "__main__":
+    data_contract_validation(
+        Path("input/chunks/part_1.csv"),
+        DATA_CONTRACT_LOCATION
+    )
