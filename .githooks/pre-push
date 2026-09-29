@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "================================"
+echo " Running CI before push"
+echo "================================"
+
+./.ci/ci.sh
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "CI failed. Push cancelled."
+    exit 1
+fi
+
+echo ""
+echo "CI passed. Continuing with push..."
+exit 0
