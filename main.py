@@ -3,6 +3,7 @@ from pathlib import Path
 import logging
 from datetime import datetime
 import yaml
+from datacontract.data_contract import DataContract
 
 
 TODAY = datetime.now().strftime("%Y-%m-%d")
@@ -82,24 +83,31 @@ def delete_all_csv_from_folder(path: Path) -> int:
 
 
 def data_contract_validation(input_file_path: Path, data_contract_file_path: Path):
-    with open(data_contract_file_path, 'r') as file:
-        data_contract = yaml.safe_load(file)
-
     df = pd.read_csv(input_file_path)
 
     if df.empty:
         raise ValueError("Input CSV contains no rows")
 
-    schema_definition = data_contract.get('Schema definition')
+    data_contract = DataContract(data_contract_file="input/data_contract.yaml")
 
-    if df.shape[1] != len(schema_definition.keys()):
-        logger.error(f"Number of columns present is different from number of columns defined in data contract")
+    errors = data_contract.lint()
 
-    for col in df.columns:
-        if col not in schema_definition.keys():
-            logger.error(f"{col} is not defined in data contact")
+    print(errors.result.value)
+    
+    # for i in errors:
+    #     print(i)
 
-        print(schema_definition[col]['type'])
+    # if not errors:
+    #     print("Data contract is valid.")
+    #     result = data_contract.validate(input_file_path)
+
+    #     print(result.is_valid())
+
+    # if errors:
+    #     print("Data contract has problems:")
+    #     for error in errors:
+    #         print(f"- {error}")
+
 
 
 

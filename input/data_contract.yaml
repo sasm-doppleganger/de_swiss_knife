@@ -62,7 +62,7 @@ schema:
         logicalType: number
 
       - name: Smoking status
-        logicalType: boolean
+        logicalType: string
         enum:
           - value: Yes
           - value: No
