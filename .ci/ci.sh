@@ -1,13 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
-echo "==> Running CI"
+echo "==> Running Python CI"
 
-echo "==> Running tests"
-npm test
+echo "==> Checking Python"
+python --version
 
-echo "==> Running lint"
-npm run lint
+echo "==> Installing dependencies"
+pip install -r requirements.txt
+
+echo "==> Running Python"
+python main.py
 
 echo "==> CI passed!"
