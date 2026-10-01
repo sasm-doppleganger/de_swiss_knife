@@ -11,7 +11,7 @@ PROJECT_ROOT = Path.cwd()
 DATA_CONTRACT_LOCATION = Path(f"{PROJECT_ROOT}/input/data_contract.yaml")
 INPUT_FILE_PATH = Path(f"{PROJECT_ROOT}/input/sleep_efficiency__raw.csv")
 OUTPUT_FOLDER = Path(f"{PROJECT_ROOT}/input/chunks")
-DIVISOR = 10
+DIVISOR = 2
 
 
 # log_dir = PROJECT_ROOT / "logs" / "local_scraper"
@@ -82,20 +82,33 @@ def delete_all_csv_from_folder(path: Path) -> int:
 
 
 def data_contract_validation(data_contract_file_path: Path):
-    data_contract = DataContract(data_contract_file=str(data_contract_file_path))
+    # DataContract class cant accept Path, needs to be converted to str
+    data_contract = DataContract(data_contract_file=str(data_contract_file_path), include_failed_samples=True)
+
+    lint = data_contract.lint()
+
+    if not lint.has_passed():
+        raise ValueError("Data contract linting failed")    
+
 
     run = data_contract.test()
+
     if not run.has_passed():
         for check in run.checks:
             if check.result.value != "passed":
-                print(" ")
-                print(check.name)
-                print(check.result)
-                print(check.reason) 
+                print(f"[{check.result.value.upper()}] {check.name}")
         raise ValueError("Data contract is violated")
+
+    print("[INFO] Data contract test has been passed")
+
     
 
 if __name__ == "__main__":
+    divide_csv_into_chunks(divisor=DIVISOR,
+                           input_file_path=INPUT_FILE_PATH,
+                           output_folder=OUTPUT_FOLDER,
+                           delete_output_contents=True)
+
     data_contract_validation(
         DATA_CONTRACT_LOCATION
     )

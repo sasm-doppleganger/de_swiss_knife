@@ -22,8 +22,8 @@ schema:
 
       - name: Age
         logicalType: integer
-        # logicalTypeOptions:
-        #   exclusiveMinimum: 17
+        logicalTypeOptions:
+          maximum: 100
 
       - name: Gender
         logicalType: string
@@ -39,9 +39,14 @@ schema:
       
       - name: Sleep duration
         logicalType: number
+        logicalTypeOptions:
+          minimum: 5
       
       - name: Sleep efficiency
         logicalType: number
+        logicalTypeOptions:
+          maximum: 1
+          minimum: 0
       
       - name: REM sleep percentage
         logicalType: integer
@@ -62,7 +67,8 @@ schema:
         logicalType: number
 
       - name: Smoking status
-        logicalType: string
+        physicalType: string
+        logicalType: boolean
         enum:
           - value: Yes
           - value: No
