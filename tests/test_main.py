@@ -4,7 +4,7 @@ import pytest
 from main import divide_csv_into_chunks
 
 
-def test_fivide_csv_into_chunks(tmp_path):
+def test_divide_csv_into_chunks(tmp_path):
     input_file = tmp_path/"input.csv"
     output_folder = tmp_path/"chunks"
     output_folder.mkdir()
