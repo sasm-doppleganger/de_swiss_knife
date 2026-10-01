@@ -14,7 +14,7 @@ description:
 
 
 schema:
-  - name: sleep_efficiency
+  - name: sleep_efficiency__raw
     properties:
       - name: ID
         logicalType: integer
@@ -22,8 +22,8 @@ schema:
 
       - name: Age
         logicalType: integer
-        logicalTypeOptions:
-          exclusiveMinimum: 17
+        # logicalTypeOptions:
+        #   exclusiveMinimum: 17
 
       - name: Gender
         logicalType: string
@@ -68,4 +68,11 @@ schema:
           - value: No
       
       - name: Exercise frequency
-        logicalType: boolean
+        logicalType: integer
+
+servers:
+  - id: my_awesome_server
+    server: my-server-name
+    type: local
+    format: csv
+    path: ./input/chunks/part_*.csv

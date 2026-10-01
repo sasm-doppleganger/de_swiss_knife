@@ -81,17 +81,18 @@ def delete_all_csv_from_folder(path: Path) -> int:
     return deleted_count
 
 
-def data_contract_validation(input_file_path: Path, data_contract_file_path: Path):
-    df = pd.read_csv(input_file_path)
+def data_contract_validation(data_contract_file_path: Path):
+    data_contract = DataContract(data_contract_file=data_contract_file_path)
 
-    if df.empty:
-        raise ValueError("Input CSV contains no rows")
-
-    data_contract = DataContract(data_contract_file="input/data_contract.yaml")
-
-    errors = data_contract.lint()
-
-    print(errors.result.value)
+    run = data_contract.test()
+    if not run.has_passed():
+        for check in run.checks:
+            if check.result.value != "passed":
+                print(" ")
+                print(check.name)
+                print(check.result)
+                print(check.reason) 
+        raise ValueError("Data contract is violated")
     
 
 
