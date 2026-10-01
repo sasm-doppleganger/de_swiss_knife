@@ -82,7 +82,7 @@ def delete_all_csv_from_folder(path: Path) -> int:
 
 
 def data_contract_validation(data_contract_file_path: Path):
-    data_contract = DataContract(data_contract_file=data_contract_file_path)
+    data_contract = DataContract(data_contract_file=str(data_contract_file_path))
 
     run = data_contract.test()
     if not run.has_passed():
@@ -95,9 +95,7 @@ def data_contract_validation(data_contract_file_path: Path):
         raise ValueError("Data contract is violated")
     
 
-
 if __name__ == "__main__":
     data_contract_validation(
-        Path("input/chunks/part_1.csv"),
         DATA_CONTRACT_LOCATION
     )
