@@ -19,6 +19,7 @@ schema:
       - name: ID
         logicalType: integer
         unique: true
+        required: true
 
       - name: Age
         logicalType: integer
